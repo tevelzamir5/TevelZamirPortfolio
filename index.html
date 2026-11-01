@@ -1,0 +1,712 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tevel Zamir | Biomedical Engineer</title>
+<meta name="description" content="Tevel Zamir, Biomedical Engineering graduate (Ben-Gurion University) specializing in signal processing. Final project on respiration under cognitive-motor load, SolidWorks design work and a housekeeping management web app.">
+<meta property="og:title" content="Tevel Zamir | Biomedical Engineer">
+<meta property="og:description" content="Tevel Zamir, Biomedical Engineering graduate (Ben-Gurion University) specializing in signal processing. Final project on respiration under cognitive-motor load, SolidWorks design work and a housekeeping management web app.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://tevelzamir5.github.io/img/preprocessing-gui.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231d5fa8'/%3E%3Ctext x='16' y='22' font-family='Arial' font-weight='700' font-size='15' fill='white' text-anchor='middle'%3ETZ%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+<style>
+/* Layout: lab-notebook page — name + tab bar on top, one panel per tab, each project a "record" with a mono metadata rail */
+:root{
+  --bg:#f5f7f8; --paper:#ffffff; --ink:#14212b; --muted:#566673; --line:#d9e1e6;
+  --accent:#1d5fa8; --trace:#e0613a; --soft:#e8eff5;
+  --hoj:#1f4a3a; --hoj-ink:#ffffff; --hoj-soft:#e7efe6; --hoj-sun:#f2c94c; --hoj-text:#1f4a3a; --wood:#9a5320; --wood-soft:#f5ebe0; --wood-mid:#e7c9a6; --blue-soft:#e3edf8; --heat:#1d5fa8;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f161c; --paper:#151e26; --ink:#e6edf2; --muted:#93a4b1; --line:#26333e;
+  --accent:#6aa8ec; --trace:#f08a64; --soft:#1a2731; --hoj:#2c5c49; --hoj-ink:#ffffff; --hoj-soft:#16241e; --hoj-sun:#e7bf4a; --hoj-text:#8fd1b0; --wood:#e4a873; --wood-soft:#241c15; --wood-mid:#5a3f28; --blue-soft:#15212d; --heat:#6aa8ec; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f161c; --paper:#151e26; --ink:#e6edf2; --muted:#93a4b1; --line:#26333e;
+  --accent:#6aa8ec; --trace:#f08a64; --soft:#1a2731; --hoj:#2c5c49; --hoj-ink:#ffffff; --hoj-soft:#16241e; --hoj-sun:#e7bf4a; --hoj-text:#8fd1b0; --wood:#e4a873; --wood-soft:#241c15; --wood-mid:#5a3f28; --blue-soft:#15212d; --heat:#6aa8ec; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.65 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1040px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.1;margin:0}
+p{margin:0;max-width:66ch}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.label{font:500 12px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+/* header + tabs */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:flex-end;gap:8px 24px;flex-wrap:wrap;padding-top:18px}
+.top .name{font:700 18px var(--display);padding-bottom:14px}
+.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;max-width:100%}
+.tabs::-webkit-scrollbar{display:none}
+.tab{appearance:none;border:0;background:none;cursor:pointer;white-space:nowrap;
+  font:500 15px var(--body);color:var(--muted);padding:10px 14px 13px;border-bottom:3px solid transparent;margin-bottom:-1px}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--trace)}
+.tab .n{font:500 11px var(--mono);color:var(--muted);margin-right:6px}
+.tab.small{font-size:13.5px;padding-left:16px;margin-left:6px;position:relative}
+.tab.small::before{content:"";position:absolute;left:0;top:12px;bottom:15px;width:1px;background:var(--line)}
+.skills{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.yt{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.yt a{display:inline-flex;align-items:center;gap:8px;font:500 15px var(--body);padding:10px 16px;border-radius:6px;background:var(--accent);color:var(--paper);text-decoration:none}
+@media (max-width:760px){.skills{grid-template-columns:1fr}}
+
+.panel{padding-block:44px 56px;animation:in .25s ease}
+@keyframes in{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.panel{animation:none}}
+
+/* about */
+.hero{display:grid;gap:14px;margin-bottom:44px;padding-bottom:36px;border-bottom:1px solid var(--line)}
+.hero h1{font-size:clamp(38px,6.5vw,70px);font-weight:700;letter-spacing:-.02em}
+.hero h1 span{color:var(--accent)}
+.hero .lede{font-size:clamp(19px,2.4vw,24px);line-height:1.5;color:var(--ink)}
+.about{display:grid;grid-template-columns:1.4fr 1fr;gap:40px}
+.about > *{min-width:0}
+.about p+p{margin-top:14px}
+.about h2{font-size:clamp(24px,3vw,30px);margin-bottom:14px}
+.facts{display:grid;border-top:1px solid var(--line);margin:0}
+.fact{display:grid;grid-template-columns:110px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.fact dd{margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.links{display:flex;flex-wrap:wrap;gap:10px}
+.links a{display:inline-flex;align-items:center;gap:8px;font:500 15px var(--body);padding:9px 16px;border-radius:6px;border:1px solid var(--line);background:var(--paper);color:var(--ink);text-decoration:none}
+.links a:hover{border-color:var(--accent);color:var(--accent)}
+.links small{font:400 12px var(--mono);color:var(--muted)}
+.chip{font:500 15.5px var(--mono);padding:7px 14px;border:1px solid var(--line);border-radius:999px;background:var(--soft);color:var(--ink)}
+.todo{color:var(--trace);font-style:italic}
+.next{margin-top:40px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.next button{font:500 14px var(--body);padding:9px 14px;border-radius:6px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.next button:hover{border-color:var(--accent);color:var(--accent)}
+
+/* contact */
+.contact{margin-top:44px;padding-top:32px;border-top:1px solid var(--line);display:grid;gap:14px}
+.mailrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.mail{font:500 clamp(17px,2.6vw,22px) var(--mono);user-select:all;word-break:break-all}
+button.copy{font:500 13px var(--body);padding:8px 14px;border-radius:6px;border:1px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer}
+button.copy:hover{background:var(--accent);color:var(--paper)}
+
+/* projects */
+.project{display:grid;grid-template-columns:200px 1fr;gap:40px}
+.project > *{min-width:0}
+.rail{display:grid;gap:18px;align-content:start}
+.rail div{display:grid;gap:2px}
+.rail .v{font:400 14px var(--mono)}
+.project h2{font-size:clamp(26px,3.6vw,38px);margin-bottom:14px}
+.project .body{display:grid;gap:28px}
+.sub{font:600 13px var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+
+.design{display:grid;grid-template-columns:auto repeat(3,1fr);border:1px solid var(--line);border-radius:6px;overflow:hidden;font:400 13px var(--mono);background:var(--paper)}
+.design div{padding:10px 12px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.design div:nth-child(4n){border-right:0}
+.design div:nth-last-child(-n+4){border-bottom:0}
+.design .h{background:var(--soft);font-weight:500}
+.design .c{color:var(--muted)}
+
+.steps{list-style:none;margin:0;padding:0;display:grid;counter-reset:s}
+.steps li{display:grid;grid-template-columns:36px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);counter-increment:s}
+.steps li::before{content:counter(s,decimal-leading-zero);font:500 13px var(--mono);color:var(--trace);padding-top:2px}
+.steps b{font-weight:600}
+
+.domains{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.domain{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:16px}
+.domain h4{margin:0 0 10px;font:600 15px var(--body)}
+.domain ul{margin:0;padding:0;list-style:none;font:400 13.5px/1.9 var(--mono);color:var(--muted)}
+
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.slot{aspect-ratio:4/3;max-width:100%;border:1.5px dashed var(--line);border-radius:6px;background:var(--paper);display:grid;place-items:center;text-align:center;padding:12px;font:400 12px var(--mono);color:var(--muted);
+  background-image:linear-gradient(var(--soft) 1px,transparent 1px),linear-gradient(90deg,var(--soft) 1px,transparent 1px);background-size:20px 20px}
+.slot.wide{grid-column:span 2}
+.shots{display:grid;gap:28px}
+.cad{display:grid;grid-template-columns:1.25fr 1fr;gap:20px;align-items:start}
+.cad > *{min-width:0}
+@media (max-width:760px){.cad{grid-template-columns:1fr}}
+.cad-name{font:600 16px var(--display);margin:6px 0 10px}
+.need{background:var(--soft);border-radius:6px;padding:18px 20px}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.feature{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:16px;display:grid;gap:8px;align-content:start;min-width:0}
+.feature svg{width:26px;height:26px;fill:none;stroke:var(--accent);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.feature h4{margin:0;font:600 15px var(--body)}
+.feature p{font-size:14px;line-height:1.55;color:var(--muted)}
+.extra{margin-top:14px;font-size:14.5px;color:var(--muted)}
+@media (max-width:900px){.features{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.features{grid-template-columns:1fr}}
+.photos{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start}
+.photos > *{min-width:0}
+.photos img{aspect-ratio:4/3;object-fit:cover}
+@media (max-width:760px){.photos{grid-template-columns:1fr}}
+.cad + .cad-name{margin-top:32px}
+.shot{margin:0;display:grid;gap:10px}
+.shot img{display:block;width:100%;max-width:100%;height:auto;border:1px solid var(--line);border-radius:6px;background:#fff}
+.shot figcaption{font-size:14px;color:var(--muted);max-width:70ch}
+.shot figcaption b{color:var(--ink);font-weight:600}
+
+
+
+/* shared: reveal, progress, lightbox */
+.progress{position:absolute;left:0;bottom:-1px;height:3px;width:0;background:linear-gradient(90deg,var(--accent),var(--trace));z-index:6;transition:width .1s linear}
+.top{position:sticky}
+.rv{transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.js-rv .rv:not(.in){transform:translateY(22px)}
+@media (prefers-reduced-motion:reduce){.rv{transition:none}.js-rv .rv:not(.in){transform:none}}
+[data-zoom]{cursor:zoom-in}
+.zoomhint{font:400 12px var(--mono);color:var(--muted);margin-top:8px}
+.lb{position:fixed;inset:0;z-index:50;background:rgba(8,12,16,.88);display:grid;place-items:center;padding:max(20px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(20px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));cursor:zoom-out}
+.lb img{max-width:100%;max-height:100%;border-radius:8px;background:#fff;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.lb button{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:calc(16px + env(safe-area-inset-right,0px));font:500 14px var(--body);padding:8px 14px;border-radius:999px;border:0;background:#fff;color:#14212b;cursor:pointer}
+.fp-block{display:grid;gap:4px}
+
+/* final project */
+.fp{display:grid;gap:52px}
+.fp-hero{background:linear-gradient(135deg,var(--blue-soft),var(--bg) 70%);border:1px solid var(--line);border-radius:14px;padding:clamp(24px,4vw,44px);display:grid;gap:18px}
+.fp-eyebrow{font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.fp-title{font-size:clamp(28px,4.4vw,46px);letter-spacing:-.01em}
+.fp-lede{font-size:17px;color:var(--ink);max-width:70ch}
+.fp-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:6px}
+.fp-stats div{display:grid;gap:2px;padding:14px;border-radius:10px;background:var(--paper);border:1px solid var(--line)}
+.fp-stats b{font:700 clamp(24px,3vw,32px) var(--display);color:var(--accent);font-variant-numeric:tabular-nums}
+.fp-stats span{font-size:13px;color:var(--muted)}
+.dgrid{display:grid;grid-template-columns:90px repeat(3,1fr);gap:8px}
+.dh{font:500 13px var(--mono);color:var(--muted);display:flex;align-items:end;padding:4px 2px}
+.dh.row{align-items:center;color:var(--ink);font-weight:600}
+.dc{appearance:none;border:2px solid transparent;border-radius:10px;padding:18px 10px;font:500 14px var(--body);cursor:pointer;transition:transform .15s,border-color .15s;color:var(--ink)}
+.dc[data-l="0"]{background:color-mix(in srgb,var(--heat) 8%,var(--paper))}
+.dc[data-l="1"]{background:color-mix(in srgb,var(--heat) 22%,var(--paper))}
+.dc[data-l="2"]{background:color-mix(in srgb,var(--heat) 42%,var(--paper))}
+.dc[data-l="3"]{background:color-mix(in srgb,var(--heat) 70%,var(--paper));color:#fff}
+.dc:hover{transform:translateY(-2px)}
+.dc.on{border-color:var(--trace)}
+.dinfo{margin-top:12px;padding:14px 16px;border-radius:10px;background:var(--paper);border:1px solid var(--line);display:grid;gap:2px}
+.dinfo b{font:600 15px var(--body);color:var(--accent)}
+.dinfo span{font-size:15px}
+.dlegend{display:flex;align-items:center;gap:10px;margin-top:10px;font:400 12px var(--mono);color:var(--muted)}
+.dlegend i{flex:0 1 140px;height:8px;border-radius:4px;background:linear-gradient(90deg,color-mix(in srgb,var(--heat) 8%,var(--paper)),color-mix(in srgb,var(--heat) 70%,var(--paper)))}
+.pipe{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;position:relative}
+.pstep{appearance:none;text-align:left;display:grid;gap:2px;padding:16px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;font:inherit;position:relative;transition:background .15s,border-color .15s}
+.pstep em{font:500 12px var(--mono);font-style:normal;color:var(--trace)}
+.pstep b{font:600 16px var(--body)}
+.pstep small{font-size:13px;color:var(--muted)}
+.pstep:hover{border-color:var(--accent)}
+.pstep.on{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+.pstep.on em,.pstep.on small{color:var(--paper);opacity:.85}
+.pstep:not(:last-child)::after{content:"→";position:absolute;right:-12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;z-index:1}
+.pdetail{margin-top:12px;padding:16px 18px;border-radius:10px;background:var(--soft);min-height:72px}
+.pdetail p{max-width:none}
+.fdomains{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}
+.fd{border-radius:12px;padding:16px;border:1px solid var(--line);background:var(--paper);min-width:0}
+.fd h4{margin:0 0 12px;font:600 15px var(--body);display:flex;justify-content:space-between;align-items:center}
+.fd h4 span{font:700 13px var(--mono);width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:var(--paper)}
+.fd-t h4 span{background:var(--accent)} .fd-a h4 span{background:var(--trace)} .fd-f h4 span{background:var(--hoj-text)}
+.fchips{display:flex;flex-wrap:wrap;gap:8px}
+.fchips span{font:500 13.5px var(--mono);padding:6px 11px;border-radius:999px;background:var(--soft);transition:transform .15s}
+.fchips span:hover{transform:translateY(-2px)}
+.fp-finding blockquote{margin:6px 0 0;font:500 clamp(18px,2.2vw,22px)/1.55 var(--body);padding:24px 28px;border-radius:14px;background:var(--blue-soft);position:relative}
+.seg{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:var(--soft);margin-bottom:14px;flex-wrap:wrap;justify-self:start}
+.seg button{appearance:none;border:0;background:transparent;font:500 14px var(--body);color:var(--muted);padding:8px 16px;border-radius:999px;cursor:pointer}
+.seg button[aria-selected="true"]{background:var(--paper);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+
+/* bench & table */
+.bt{display:grid;gap:52px}
+.bt-hero{background:var(--wood-soft);border-radius:14px;display:grid;grid-template-columns:1.2fr 1fr;overflow:hidden}
+.bt-copy{padding:clamp(24px,4vw,44px);display:grid;gap:16px;align-content:center;min-width:0}
+.bt-eyebrow{font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--wood)}
+.bt-title{font-size:clamp(28px,4.2vw,44px)}
+.bt-tags{display:flex;flex-wrap:wrap;gap:8px}
+.bt-tags span{font:500 13.5px var(--mono);padding:6px 12px;border-radius:999px;background:var(--wood-mid);color:var(--ink)}
+.bt-heroimg{width:100%;height:100%;object-fit:cover;min-height:260px;display:block}
+.bt-process{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:0;counter-reset:b}
+.bt-process li{counter-increment:b;display:grid;gap:4px;padding:16px 18px 0;border-top:3px solid var(--wood-mid);position:relative}
+.bt-process li::before{content:counter(b);position:absolute;top:-15px;left:18px;width:26px;height:26px;border-radius:50%;background:var(--wood);color:var(--paper);font:700 13px var(--mono);display:grid;place-items:center}
+.bt-process li:first-child{border-top-color:var(--wood)}
+.bt-process b{font:600 16px var(--body);margin-top:6px}
+.bt-process span{font-size:14px;color:var(--muted)}
+.bt-sub{color:var(--wood)}
+.cadgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;align-items:start}
+.cadgrid .shot img{aspect-ratio:4/3;object-fit:contain;padding:6px;transition:transform .2s,box-shadow .2s}
+.cadgrid .shot img:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,.12)}
+.cadgrid figcaption{font-size:13px}
+.showcase{display:grid;grid-template-columns:minmax(0,1fr) 150px;gap:14px;align-items:start;max-width:900px}
+.showcase .thumbs{grid-template-columns:1fr;max-width:none}
+.showcase .main img{aspect-ratio:4/3;object-fit:cover;border-radius:12px}
+.thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:520px}
+.thumb{appearance:none;padding:0;border:3px solid transparent;border-radius:10px;overflow:hidden;cursor:pointer;background:none;opacity:.7;transition:opacity .15s,border-color .15s}
+.thumb img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
+.thumb:hover{opacity:1}
+.thumb.on{border-color:var(--wood);opacity:1}
+#bt-main{transition:opacity .2s}
+
+@media (max-width:820px){
+  .fp-stats{grid-template-columns:1fr 1fr}
+  .dgrid{grid-template-columns:70px repeat(3,1fr);gap:6px}
+  .dc{padding:14px 6px;font-size:12.5px}
+  .pipe{grid-template-columns:1fr 1fr}
+  .pstep:not(:last-child)::after{display:none}
+  .fdomains{grid-template-columns:1fr}
+  .bt-hero{grid-template-columns:1fr}
+  .bt-heroimg{order:-1;max-height:260px}
+  .bt-process{grid-template-columns:1fr 1fr;row-gap:28px}
+  .cadgrid{grid-template-columns:1fr 1fr}
+  .showcase{grid-template-columns:1fr}
+  .showcase .thumbs{grid-template-columns:repeat(3,1fr)}
+}
+
+/* House of Joy promo */
+.hoj{display:grid;gap:48px}
+.hoj-hero{background:var(--hoj);color:var(--hoj-ink);border-radius:14px;padding:40px clamp(20px,4vw,48px) 0;display:grid;grid-template-columns:1.1fr 1fr;gap:24px;overflow:hidden;position:relative}
+.hoj-hero::after{content:"";position:absolute;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(242,201,76,.28),transparent 65%);right:-80px;top:-120px;pointer-events:none}
+.hoj-copy{display:grid;gap:16px;align-content:center;padding-bottom:40px;min-width:0;position:relative;z-index:1}
+.hoj-eyebrow{font:500 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--hoj-sun)}
+.hoj-title{font:700 clamp(44px,7vw,76px)/1 var(--display);letter-spacing:-.02em;color:var(--hoj-ink)}
+.hoj-tag{font-size:clamp(17px,2vw,21px);line-height:1.45;opacity:.92;max-width:28ch}
+.hoj-ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.hoj-btn{display:inline-flex;align-items:center;font:600 15px var(--body);padding:12px 20px;border-radius:999px;background:var(--hoj-sun);color:#1b2a22;text-decoration:none;transition:transform .15s}
+.hoj-btn:hover{transform:translateY(-2px)}
+.hoj-btn.ghost{background:transparent;color:var(--hoj-ink);border:1.5px solid rgba(255,255,255,.5)}
+.hoj-btn.ghost:hover{background:var(--hoj-sun);color:#1b2a22;border-color:var(--hoj-sun)}
+.hoj-ticks{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;opacity:.85}
+.hoj-ticks li::before{content:"✓ ";color:var(--hoj-sun);font-weight:700}
+.hoj-phones{position:relative;min-height:380px;z-index:1}
+.phone{background:#0d1512;border-radius:30px;padding:8px;box-shadow:0 24px 50px rgba(0,0,0,.35);max-width:100%}
+.phone img{display:block;width:100%;border-radius:23px}
+.hoj-phones .phone{position:absolute;width:min(220px,48%)}
+.hoj-phones .front{left:12%;top:30px;z-index:2;animation:float 6s ease-in-out infinite}
+.hoj-phones .back{left:48%;top:70px;transform:rotate(6deg);opacity:.95}
+@keyframes float{50%{transform:translateY(-10px)}}
+.hoj-sound{text-align:center;display:grid;gap:18px;justify-items:center}
+.hoj-kicker{font:700 clamp(24px,3.4vw,34px) var(--display)}
+.bubbles{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+.bubble{font:500 16px var(--body);padding:12px 18px;border-radius:20px 20px 20px 4px;background:var(--paper);border:1px solid var(--line)}
+.bubble.b2{border-radius:20px 20px 4px 20px;background:var(--hoj-soft)}
+.hoj-answer{font-size:17px;color:var(--muted)}
+.hoj-tour{display:grid;grid-template-columns:1fr 300px;gap:40px;align-items:center;background:var(--hoj-soft);border-radius:14px;padding:32px clamp(16px,4vw,40px)}
+.hoj-tour > *{min-width:0}
+.tour-list{display:grid;gap:8px}
+.tour-item{appearance:none;text-align:left;display:grid;gap:2px;padding:14px 16px;border-radius:10px;border:1px solid transparent;background:transparent;color:var(--ink);cursor:pointer;font:inherit;transition:background .15s,border-color .15s}
+.tour-item b{font:600 17px var(--body)}
+.tour-item span{font-size:14px;color:var(--muted)}
+.tour-item:hover{background:var(--paper)}
+.tour-item[aria-selected="true"]{background:var(--paper);border-color:var(--line);box-shadow:inset 4px 0 0 var(--hoj-text)}
+.tour-stage{display:grid;justify-items:center;gap:10px}
+.phone.big{width:260px}
+.phone.big img{transition:opacity .25s}
+.tour-hint{font:400 12px var(--mono);color:var(--muted)}
+.hoj-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center}
+.hoj-strip div{display:grid;gap:2px;padding:18px 8px;border-top:3px solid var(--hoj)}
+.hoj-strip b{font:700 clamp(26px,3.5vw,36px) var(--display);color:var(--hoj-text)}
+.hoj-strip span{font-size:14px;color:var(--muted)}
+.hoj-cta2{background:var(--hoj);color:var(--hoj-ink);border-radius:14px;padding:32px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+.hoj-cta2 p{font:700 clamp(22px,3vw,30px) var(--display)}
+.hoj-built{padding-top:8px;border-top:1px solid var(--line)}
+.hoj-built .fact{grid-template-columns:130px 1fr}
+@media (max-width:820px){
+  .hoj-hero{grid-template-columns:1fr;padding-top:32px}
+  .hoj-copy{padding-bottom:0}
+  .hoj-phones{min-height:340px}
+  .hoj-phones .phone{width:min(180px,44%)}
+  .hoj-phones .front{left:8%}
+  .hoj-phones .back{left:48%}
+  .hoj-tour{grid-template-columns:1fr}
+  .tour-stage{order:-1}
+  .phone.big{width:min(240px,80%)}
+  .tour-list{grid-template-columns:1fr 1fr}
+  .tour-item span{display:none}
+  .hoj-strip{grid-template-columns:repeat(3,1fr)}
+}
+@media (prefers-reduced-motion:reduce){.hoj-phones .front{animation:none}.hoj-btn{transition:none}}
+
+footer{padding-block:24px;border-top:1px solid var(--line);font:400 12px var(--mono);color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+@media (max-width:760px){
+  .top{padding-top:14px}
+  .top .name{padding-bottom:0}
+  .tab{padding:10px 10px 12px;font-size:14px}
+  .tab .n{display:none}
+  .about,.project{grid-template-columns:1fr;gap:24px}
+  .rail{grid-template-columns:repeat(2,1fr)}
+  .domains{grid-template-columns:1fr}
+  .gallery{grid-template-columns:1fr 1fr}
+  .fact{grid-template-columns:90px 1fr}
+}
+@media (max-width:460px){.design{font-size:11.5px}.design div{padding:8px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <span class="name">Tevel Zamir</span>
+    <div class="progress" id="progress" aria-hidden="true"></div>
+    <div class="tabs" role="tablist" aria-label="Portfolio sections">
+      <button class="tab" role="tab" id="tab-about" aria-controls="about" aria-selected="true">About me</button>
+      <button class="tab" role="tab" id="tab-final-project" aria-controls="final-project" aria-selected="false" tabindex="-1"><span class="n">01</span>Final Project</button>
+      <button class="tab" role="tab" id="tab-bench-table" aria-controls="bench-table" aria-selected="false" tabindex="-1"><span class="n">02</span>Bench &amp; Table</button>
+      <button class="tab" role="tab" id="tab-house-of-joy" aria-controls="house-of-joy" aria-selected="false" tabindex="-1"><span class="n">03</span>Housekeeping Management App</button>
+    </div>
+  </header>
+
+  <!-- ABOUT -->
+  <section class="panel" id="about" role="tabpanel" aria-labelledby="tab-about">
+    <div class="hero">
+      <span class="label">Biomedical Engineer · Signal processing</span>
+      <p class="lede">Biomedical Engineering graduate from Ben-Gurion University, specializing in signal processing. My studies combined signal processing, data analysis and human physiology, with additional coursework in biomechanics, robotics and neural networks.</p>
+    </div>
+
+    <div class="about">
+      <div>
+        <h2>About me</h2>
+        <p>I’m a Biomedical Engineering graduate from Ben-Gurion University, specializing in signal processing, with additional training in biomechanics. My final project, conducted with the Plotnik Lab at Sheba Medical Center, investigated the effects of cognitive and motor load on respiratory patterns in a virtual reality environment.</p>
+        <p>I’m seeking opportunities in signal processing, data analysis or biomechanics. My skills include MATLAB and Python for signal processing and data analysis, as well as SolidWorks for 3D modeling, mechanical design and technical drawings.</p>
+        <div class="chips">
+          <span class="chip">MATLAB</span><span class="chip">Python</span><span class="chip">SolidWorks</span><span class="chip">Signal Processing</span><span class="chip">DSP</span><span class="chip">Machine Learning</span>
+        </div>
+      </div>
+      <div>
+        <h2>Education</h2>
+        <dl class="facts">
+          <div class="fact"><dt class="label">Degree</dt><dd>B.Sc. Biomedical Engineering</dd></div>
+          <div class="fact"><dt class="label">University</dt><dd>Ben-Gurion University of the Negev, 2022–2026</dd></div>
+          <div class="fact"><dt class="label">Final project</dt><dd>Respiratory dynamics in cognitive-motor dual tasking, Sheba Medical Center</dd></div>
+          <div class="fact"><dt class="label">Courses</dt><dd>Physiological signal processing, digital signal processing, control theory, neural networks, machine learning, digital systems, introduction to robotics</dd></div>
+          <div class="fact"><dt class="label">Based in</dt><dd>Israel</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="next">
+      <span class="label">See my projects</span>
+      <button type="button" data-go="final-project">Final Project</button>
+      <button type="button" data-go="bench-table">Bench &amp; Table</button>
+      <button type="button" data-go="house-of-joy">Housekeeping Management App</button>
+    </div>
+
+    <div class="contact">
+      <span class="label">Contact</span>
+      <div class="mailrow">
+        <span class="mail" id="mail">tevelzamir5@gmail.com</span>
+        <button class="copy" id="copy" type="button">Copy email</button>
+      </div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/tevel-zamir-653b74317/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/tevelzamir5/Respiration-Signal-Analysis" target="_blank" rel="noopener">GitHub <small>Respiration Signal Analysis</small></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL PROJECT -->
+  <section class="panel fp" id="final-project" role="tabpanel" aria-labelledby="tab-final-project" hidden>
+
+    <div class="fp-hero">
+      <span class="fp-eyebrow">Final Project · Plotnik Lab, Sheba Medical Center</span>
+      <h2 class="fp-title">Breathing Under Load: Exploring Cognitive–Motor Dual Tasking</h2>
+      <p class="fp-lede">In our daily routine, we encounter situations where we perform multiple tasks. Walking while performing a cognitive task is an example of dual tasking, where two tasks compete for attentional resources. This project explored how cognitive and motor load, separately and together, affect respiratory patterns. Participants performed a virtual reality version of the Color Trails Test (VR-CTT) while standing and walking, allowing us to examine how breathing responds to different levels of task demand.</p>
+      <div class="fp-stats">
+        <div><b data-count="29">29</b><span>participants</span></div>
+        <div><b data-count="512">512</b><span>Hz respiratory belt</span></div>
+        <div><b>2 × 3</b><span>within-subject design</span></div>
+        <div><b data-count="9">9</b><span>respiratory features</span></div>
+      </div>
+      <div class="links fp-links">
+        <a href="https://github.com/tevelzamir5/Respiration-Signal-Analysis" target="_blank" rel="noopener">View the code on GitHub <small>Respiration Signal Analysis</small></a>
+      </div>
+    </div>
+
+    <div class="fp-block rv">
+      <p class="sub">Study design · tap a condition</p>
+      <div class="dgrid" role="group" aria-label="Study design">
+        <div class="dh"></div><div class="dh">Baseline</div><div class="dh">T1 · Trails A</div><div class="dh">T2 · Trails B</div>
+        <div class="dh row">Standing</div>
+        <button type="button" class="dc" data-l="0" data-t="Standing · Baseline" data-d="Quiet standing with no cognitive task. The reference condition.">no task</button>
+        <button type="button" class="dc" data-l="1" data-t="Standing · T1" data-d="Standing while connecting numbered circles in order (sustained visual attention).">sustained attention</button>
+        <button type="button" class="dc" data-l="2" data-t="Standing · T2" data-d="Standing while alternating between numbers and colors (divided attention), the harder cognitive task.">divided attention</button>
+        <div class="dh row">Walking</div>
+        <button type="button" class="dc" data-l="1" data-t="Walking · Baseline" data-d="Walking with no cognitive task. Motor load only.">no task</button>
+        <button type="button" class="dc" data-l="2" data-t="Walking · T1" data-d="Walking while performing the sustained-attention task. Motor and cognitive load together.">sustained attention</button>
+        <button type="button" class="dc on" data-l="3" data-t="Walking · T2" data-d="Walking while performing the divided-attention task. The highest combined load in the study.">divided attention</button>
+      </div>
+      <div class="dinfo" aria-live="polite"><b id="dinfo-t">Walking · T2</b><span id="dinfo-d">Walking while performing the divided-attention task. The highest combined load in the study.</span></div>
+      <div class="dlegend"><span>Lower load</span><i></i><span>Higher load</span></div>
+    </div>
+
+    <div class="fp-block rv">
+      <p class="sub">What I built · tap a step</p>
+      <div class="pipe" role="tablist" aria-label="Processing pipeline">
+        <button type="button" class="pstep on" role="tab" aria-selected="true" data-p="0"><em>01</em><b>Preprocessing</b><small>MATLAB</small></button>
+        <button type="button" class="pstep" role="tab" aria-selected="false" data-p="1"><em>02</em><b>Feature extraction</b><small>MATLAB</small></button>
+        <button type="button" class="pstep" role="tab" aria-selected="false" data-p="2"><em>03</em><b>Data cleaning</b><small>Python</small></button>
+        <button type="button" class="pstep" role="tab" aria-selected="false" data-p="3"><em>04</em><b>Statistics</b><small>Python</small></button>
+      </div>
+      <div class="pdetail">
+        <p data-pd="0"><b>Preprocessing GUI (MATLAB).</b> DC removal, band-pass filtering (0.1–1 Hz), accelerometer-based LMS adaptive filtering for walking trials, smoothing, z-score normalization and peak detection, per 60-second segment.</p>
+        <p data-pd="1" hidden><b>Feature extraction GUI (MATLAB).</b> 9 respiratory features across time, amplitude and frequency domains.</p>
+        <p data-pd="2" hidden><b>Data cleaning (Python).</b> Robust MAD-based outlier detection per condition, with an adaptive log-transform for skewed features.</p>
+        <p data-pd="3" hidden><b>Statistics.</b> Two-way repeated-measures ANOVA to assess condition, test and interaction effects, followed by model-based post-hoc comparisons using estimated marginal means.</p>
+      </div>
+    </div>
+
+    <div class="fp-block rv">
+      <p class="sub">9 features</p>
+      <div class="fdomains">
+        <div class="fd fd-t"><h4>Time domain <span>6</span></h4><div class="fchips"><span>Mean RR</span><span>Mean Ti / Te</span><span>Mean IBI</span><span>I:E ratio</span><span>CV of RR</span><span>RMSSD of IBI</span></div></div>
+        <div class="fd fd-a"><h4>Amplitude domain <span>1</span></h4><div class="fchips"><span>AUC amplitude</span></div></div>
+        <div class="fd fd-f"><h4>Frequency domain <span>2</span></h4><div class="fchips"><span>Spectral entropy</span><span>Band power</span></div></div>
+      </div>
+    </div>
+
+    <div class="fp-block fp-finding rv">
+      <p class="sub">Key finding</p>
+      <blockquote>The project showed that respiratory signals capture changes associated with both cognitive effort and walking. Breathing rate alone did not tell the full story, but analyzing variability, amplitude and frequency-based features revealed that cognitive demands affected breathing differently during standing and walking. These findings demonstrate the value of combining multiple signal features to assess physiological responses during dual tasking.</blockquote>
+    </div>
+
+    <div class="fp-block rv">
+      <p class="sub">The tools I built</p>
+      <div class="seg" role="tablist" aria-label="GUI screenshots">
+        <button type="button" role="tab" aria-selected="true" data-g="0">Preprocessing GUI</button>
+        <button type="button" role="tab" aria-selected="false" data-g="1">Feature extraction GUI</button>
+      </div>
+      <figure class="shot gui" data-gp="0">
+        <img src="img/preprocessing-gui.png" data-zoom alt="Respiration Signal Processing GUI in MATLAB, showing a raw respiration signal above the filtered signal with detected inhale and exhale peaks" loading="lazy">
+        <figcaption><b>Preprocessing GUI.</b> Load a subject, display the signal after DC removal and band-pass filtering (0.1–1 Hz), apply an LMS filter for walking trials, smooth, normalize and detect breath peaks with manual correction.</figcaption>
+      </figure>
+      <figure class="shot gui" data-gp="1" hidden>
+        <img src="img/features-gui.png" data-zoom alt="Feature extraction GUI in MATLAB, showing the signal with task events, a breathing-rate plot over time and a table of computed metrics" loading="lazy">
+        <figcaption><b>Feature extraction GUI.</b> Select a segment, view task events on the signal, plot a feature over time and export the results table.</figcaption>
+      </figure>
+      <p class="zoomhint">Click a screenshot to enlarge it</p>
+    </div>
+  </section>
+
+  <!-- BENCH & TABLE -->
+  <section class="panel bt" id="bench-table" role="tabpanel" aria-labelledby="tab-bench-table" hidden>
+
+    <div class="bt-hero">
+      <div class="bt-copy">
+        <span class="bt-eyebrow">Bench &amp; Table · Design and build</span>
+        <h2 class="bt-title">Bench and table, from CAD to real wood</h2>
+        <p>I designed a matching bench and table in SolidWorks, from individual parts to the complete assembly, and then built them using reclaimed wooden pallets that I cut and sanded into the required components. The bench measures 120 × 60 × 30 cm and the table measures 100 × 38 × 30 cm (W × D × H). Working with salvaged wood required adapting the design and adjusting parts during construction to accommodate the available material and ensure everything fit together.</p>
+        <div class="bt-tags"><span>Bench 120 × 60 × 30 cm</span><span>Table 100 × 38 × 30 cm</span><span>Reclaimed pallet wood</span><span>SolidWorks</span></div>
+      </div>
+      <img class="bt-heroimg" src="img/bench-angle.jpg" data-zoom alt="The finished bench from an angle, showing the crossed legs and the reclined backrest">
+    </div>
+
+    <ol class="bt-process rv">
+      <li><b>Model</b><span>Parts and assembly in SolidWorks</span></li>
+      <li><b>Draw</b><span>Dimensioned technical drawings</span></li>
+      <li><b>Cut &amp; sand</b><span>Pallet boards into components</span></li>
+      <li><b>Assemble</b><span>Adjusting parts to fit</span></li>
+    </ol>
+
+    <div class="fp-block rv">
+      <p class="sub bt-sub">SolidWorks model</p>
+      <div class="cadgrid">
+        <figure class="shot"><img src="img/bench-render.jpg" data-zoom alt="Rendered SolidWorks assembly of the double bench with slatted seat, backrest, angled legs and armrests" loading="lazy"><figcaption><b>Bench, assembly render</b></figcaption></figure>
+        <figure class="shot"><img src="img/bench-drawing.jpg" data-zoom alt="SolidWorks technical drawing of the double bench with front and isometric views and dimensioned parts" loading="lazy"><figcaption><b>Bench, technical drawing</b></figcaption></figure>
+        <figure class="shot"><img src="img/table-render.jpg" data-zoom alt="Rendered SolidWorks assembly of the table with a two-board top, four legs and a middle stretcher" loading="lazy"><figcaption><b>Table, assembly render</b></figcaption></figure>
+        <figure class="shot"><img src="img/table-drawing.jpg" data-zoom alt="SolidWorks technical drawing of the table with front and isometric views and dimensioned parts" loading="lazy"><figcaption><b>Table, technical drawing</b></figcaption></figure>
+      </div>
+      <p class="zoomhint">Click an image to enlarge it</p>
+    </div>
+
+    <div class="fp-block rv">
+      <p class="sub bt-sub">The finished product</p>
+      <div class="showcase">
+        <figure class="shot main">
+          <img id="bt-main" src="img/bench-front.jpg" data-zoom alt="The finished double bench built from reclaimed pallet wood, seen from the front">
+          <figcaption id="bt-cap"><b>Bench, front view</b></figcaption>
+        </figure>
+        <div class="thumbs" role="group" aria-label="Choose a photo">
+          <button type="button" class="thumb on" data-src="img/bench-front.jpg" data-cap="Bench, front view" data-alt="The finished double bench built from reclaimed pallet wood, seen from the front"><img src="img/bench-front.jpg" alt=""></button>
+          <button type="button" class="thumb" data-src="img/bench-angle.jpg" data-cap="Bench, side view" data-alt="The finished bench from an angle, showing the crossed legs and the reclined backrest"><img src="img/bench-angle.jpg" alt=""></button>
+          <button type="button" class="thumb" data-src="img/table-photo.jpg" data-cap="Table, side view" data-alt="The finished low table with a two-board top on four wooden legs"><img src="img/table-photo.jpg" alt=""></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOUSE OF JOY -->
+  <section class="panel hoj" id="house-of-joy" role="tabpanel" aria-labelledby="tab-house-of-joy" hidden>
+
+    <div class="hoj-hero">
+      <div class="hoj-copy">
+        <h2 class="hoj-title">Housekeeping Manager</h2>
+        <p class="hoj-tag">Bills, plans, chores and the dog. One shared app for the whole house.</p>
+        <div class="hoj-ctas">
+          <a class="hoj-btn ghost" href="#hoj-built" id="hoj-built-link">How it’s built</a>
+        </div>
+        <ul class="hoj-ticks">
+          <li>Syncs in real time</li><li>Works on any phone</li><li>Built for two</li>
+        </ul>
+      </div>
+      <div class="hoj-phones" aria-hidden="true">
+        <div class="phone back"><img src="img/hoj-calendar.jpg" alt=""></div>
+        <div class="phone front"><img src="img/hoj-bills.jpg" alt=""></div>
+      </div>
+    </div>
+
+    <div class="hoj-sound">
+      <p class="hoj-kicker">Sound familiar?</p>
+      <div class="bubbles">
+        <span class="bubble">“Did we pay that?”</span>
+        <span class="bubble b2">“Where are we supposed to be?”</span>
+        <span class="bubble">“We’re out of that again.”</span>
+        <span class="bubble b2">“Who fed the dog?”</span>
+      </div>
+      <p class="hoj-answer">Housekeeping Manager answers all of them, in one place.</p>
+    </div>
+
+    <div class="hoj-tour">
+      <div class="tour-list" role="tablist" aria-label="App features">
+        <button type="button" class="tour-item" role="tab" aria-selected="true" data-shot="bills"><b>Bills</b><span>Due dates, amounts, paid or not</span></button>
+        <button type="button" class="tour-item" role="tab" aria-selected="false" data-shot="calendar"><b>Calendar</b><span>Shared plans, color-coded</span></button>
+        <button type="button" class="tour-item" role="tab" aria-selected="false" data-shot="shopping"><b>Shopping</b><span>Lists everyone can edit</span></button>
+        <button type="button" class="tour-item" role="tab" aria-selected="false" data-shot="tasks"><b>Tasks</b><span>Recurring chores, assigned</span></button>
+        <button type="button" class="tour-item" role="tab" aria-selected="false" data-shot="pets"><b>Pet care</b><span>Food runs low? It reminds you</span></button>
+        <button type="button" class="tour-item" role="tab" aria-selected="false" data-shot="documents"><b>Documents</b><span>Lease, IDs, key phone numbers</span></button>
+      </div>
+      <div class="tour-stage">
+        <div class="phone big"><img id="tour-img" src="img/hoj-bills.jpg" alt="House of Joy app screen: Bills"></div>
+        <p class="tour-hint">Tap a feature to see it</p>
+      </div>
+    </div>
+
+    <div class="hoj-strip">
+      <div><b>6</b><span>sections</span></div>
+      <div><b>Live</b><span>sync on every device</span></div>
+      <div><b>Daily</b><span>in real use</span></div>
+    </div>
+
+    <div class="hoj-built" id="hoj-built">
+      <p class="sub">How it’s built</p>
+      <dl class="facts">
+        <div class="fact"><dt class="label">Type</dt><dd>Single-page web app, mobile-first, can be added to the home screen</dd></div>
+        <div class="fact"><dt class="label">Front end</dt><dd>HTML, CSS, JavaScript</dd></div>
+        <div class="fact"><dt class="label">Database</dt><dd>Firebase Firestore, real-time sync between devices</dd></div>
+        <div class="fact"><dt class="label">File storage</dt><dd>Firebase Storage for bill photos, PDFs and documents</dd></div>
+        <div class="fact"><dt class="label">Security</dt><dd>Firebase Authentication with Firestore and Storage security rules</dd></div>
+        <div class="fact"><dt class="label">Hosting</dt><dd>GitHub Pages</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <div class="lb" id="lb" hidden><button type="button" id="lb-close">Close</button><img id="lb-img" alt=""></div>
+
+  <footer><span>Tevel Zamir · Biomedical Engineering</span><span>tevelzamir5@gmail.com</span></footer>
+</div>
+
+<script>
+(function(){
+  /* ---- tabs ---- */
+  const tabs=[...document.querySelectorAll('.tabs [role="tab"]')];
+  const ids=tabs.map(t=>t.getAttribute('aria-controls'));
+  function show(id,focus){
+    if(!ids.includes(id)) id='about';
+    tabs.forEach(t=>{
+      const on=t.getAttribute('aria-controls')===id;
+      t.setAttribute('aria-selected',on);t.tabIndex=on?0:-1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden=!on;
+      if(on&&focus)t.focus();
+      if(on)t.scrollIntoView({block:'nearest',inline:'nearest'});
+    });
+    try{history.replaceState(null,'','#'+id)}catch(e){}
+    window.scrollTo(0,0);
+  }
+  tabs.forEach((t,i)=>{
+    t.addEventListener('click',()=>show(ids[i]));
+    t.addEventListener('keydown',e=>{
+      let j=null;
+      if(e.key==='ArrowRight')j=(i+1)%tabs.length;
+      if(e.key==='ArrowLeft')j=(i-1+tabs.length)%tabs.length;
+      if(e.key==='Home')j=0; if(e.key==='End')j=tabs.length-1;
+      if(j!==null){e.preventDefault();show(ids[j],true)}
+    });
+  });
+  document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.go)));
+
+  show((location.hash||'#about').slice(1));
+
+
+  /* ---- House of Joy tour ---- */
+  (function(){
+    const items=[...document.querySelectorAll('.tour-item')];
+    const img=document.getElementById('tour-img');
+    if(!items.length||!img) return;
+    let i=0,timer=null;
+    const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function pick(n){
+      i=n; items.forEach((b,k)=>b.setAttribute('aria-selected',k===n));
+      const key=items[n].dataset.shot;
+      img.style.opacity=0;
+      setTimeout(()=>{img.src='img/hoj-'+key+'.jpg';img.alt='House of Joy app screen: '+items[n].querySelector('b').textContent;img.style.opacity=1},reduce?0:180);
+    }
+    items.forEach((b,k)=>b.addEventListener('click',()=>{clearInterval(timer);timer=null;pick(k)}));
+    if(!reduce) timer=setInterval(()=>{ if(!document.getElementById('house-of-joy').hidden) pick((i+1)%items.length) },3500);
+    ['calendar','shopping','tasks','pets','documents'].forEach(k=>{const p=new Image();p.src='img/hoj-'+k+'.jpg'});
+    const bl=document.getElementById('hoj-built-link');
+    if(bl) bl.addEventListener('click',e=>{e.preventDefault();document.getElementById('hoj-built').scrollIntoView({behavior:reduce?'auto':'smooth'})});
+  })();
+
+
+  /* ---- interactions ---- */
+  (function(){
+    const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // scroll progress
+    const bar=document.getElementById('progress');
+    const upd=()=>{const h=document.documentElement.scrollHeight-innerHeight;bar.style.width=(h>0?Math.min(100,scrollY/h*100):0)+'%'};
+    addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();
+    // reveal
+    if('IntersectionObserver' in window && !reduce){
+      document.documentElement.classList.add('js-rv');
+      const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
+      document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+    }
+    // lightbox
+    const lb=document.getElementById('lb'),lbi=document.getElementById('lb-img');
+    document.addEventListener('click',e=>{
+      const t=e.target.closest('[data-zoom]'); if(!t) return;
+      lbi.src=t.currentSrc||t.src; lbi.alt=t.alt; lb.hidden=false;
+    });
+    const close=()=>{lb.hidden=true;lbi.removeAttribute('src')};
+    lb.addEventListener('click',close);
+    addEventListener('keydown',e=>{if(e.key==='Escape'&&!lb.hidden)close()});
+    // study design
+    const cells=[...document.querySelectorAll('.dc')];
+    cells.forEach(c=>c.addEventListener('click',()=>{cells.forEach(x=>x.classList.toggle('on',x===c));
+      document.getElementById('dinfo-t').textContent=c.dataset.t;document.getElementById('dinfo-d').textContent=c.dataset.d;}));
+    // pipeline
+    const steps=[...document.querySelectorAll('.pstep')];
+    steps.forEach(st=>st.addEventListener('click',()=>{steps.forEach(x=>{const on=x===st;x.classList.toggle('on',on);x.setAttribute('aria-selected',on)});
+      document.querySelectorAll('[data-pd]').forEach(p=>p.hidden=p.dataset.pd!==st.dataset.p);}));
+    // gui toggle
+    const segs=[...document.querySelectorAll('.seg button')];
+    segs.forEach(b=>b.addEventListener('click',()=>{segs.forEach(x=>x.setAttribute('aria-selected',x===b));
+      document.querySelectorAll('[data-gp]').forEach(f=>f.hidden=f.dataset.gp!==b.dataset.g);}));
+    // showcase thumbs
+    const main=document.getElementById('bt-main'),cap=document.getElementById('bt-cap');
+    const th=[...document.querySelectorAll('.thumb')];
+    th.forEach(t=>t.addEventListener('click',()=>{th.forEach(x=>x.classList.toggle('on',x===t));
+      main.style.opacity=0;setTimeout(()=>{main.src=t.dataset.src;main.alt=t.dataset.alt;cap.innerHTML='<b>'+t.dataset.cap+'</b>';main.style.opacity=1},reduce?0:150);}));
+    // count-up
+    if(!reduce && 'IntersectionObserver' in window){
+      const co=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;co.unobserve(e.target);
+        const el=e.target,end=+el.dataset.count,t0=performance.now();
+        const step=n=>{const k=Math.min(1,(n-t0)/900);el.textContent=Math.round(end*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step);}));
+      document.querySelectorAll('[data-count]').forEach(el=>co.observe(el));
+    }
+  })();
+
+  /* ---- copy email ---- */
+  const btn=document.getElementById('copy');
+  btn.addEventListener('click',()=>{
+    const m=document.getElementById('mail');
+    const sel=()=>{const r=document.createRange();r.selectNodeContents(m);const s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent='Selected, press Ctrl+C'};
+    try{navigator.clipboard.writeText(m.textContent).then(()=>{btn.textContent='Copied'},sel)}catch(e){sel()}
+  });
+})();
+</script>
+</body>
+</html>
