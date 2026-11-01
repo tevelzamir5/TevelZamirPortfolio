@@ -2,7 +2,7 @@
 
 Personal portfolio website: Biomedical Engineering graduate (Ben-Gurion University), specializing in signal processing.
 
-Live site: [https://tevelzamir5.github.io/](https://tevelzamir5.github.io/TevelZamirPortfolio/)
+Live site: (https://tevelzamir5.github.io/TevelZamirPortfolio/)
 
 Contents:
 - About me and education
